@@ -1,32 +1,32 @@
-# @extends
+#include <Adafruit_CircuitPlayground.h>
 
-## #example
+const int buzzer = A1;
 
-```sim
-let temp = input.temperature(TemperatureUnit.Celsius);
-let level = input.lightLevel();
-let accel = input.acceleration(Dimension.Y);
-input.buttonA.onEvent(ButtonEvent.Click, function () {
-    for (let i = 0; i < 2; i++) {
-        let j = 0;
-        while (j < 11) {
-            if (j < 10) {
-                light.setPixelColor(j, 0xffff00);
-                pause(30);
-            }
-            if (j > 0) {
-                light.setPixelColor(j - 1, 0x000000);
-            }
-            j++;
-        }
-    }
-})
-input.buttonB.onEvent(ButtonEvent.Click, function () {
-    for (let k = 0; k < 2; k++) {
-        light.setAll(0x00ff00);
-        pause(200);
-        light.setAll(0x000000);
-        pause(200);
-    }
-})
-```
+void setup() {
+  // put your setup code here, to run once:
+  CircuitPlayground.begin();
+  pinMode(buzzer, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:  
+   Serial.println(CircuitPlayground.temperatureF());
+//   if(temp < 100){
+//      makeTone(buzzer, 440, 100);
+//   }
+//   else if(temp > 500){
+//    makeTone(buzzer, 200, 500);
+//   }
+}
+void makeTone (unsigned char speakerPin, int frequencyInHertz, long timeInMilliseconds) {
+  int x;   
+  long delayAmount = (long)(1000000/frequencyInHertz);
+  long loopTime = (long)((timeInMilliseconds*1000)/(delayAmount*2));
+  for (x=0; x<loopTime; x++) {        // the wave will be symetrical (same time high & low)
+     digitalWrite(speakerPin,HIGH);   // Set the pin high
+     delayMicroseconds(delayAmount);  // and make the tall part of the wave
+     digitalWrite(speakerPin,LOW);    // switch the pin back to low
+     delayMicroseconds(delayAmount);  // and make the bottom part of the wave
+  }  
+}
